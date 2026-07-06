@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hachioji Peace Fes - 平和アンケート最終集計報告</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts & FontAwesome -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Fredoka:wght@400;700&display=swap" rel="stylesheet">
@@ -39,23 +37,44 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 10px;
         }
 
-        /* 16:9比率のメインプレゼンテーションフレーム */
+        /* 16:9比率ベースのメインプレゼンテーションフレーム（レスポンシブ拡張版） */
         .presentation-frame {
-            width: 1200px;
-            height: 675px;
+            width: 100%;
+            max-width: 1200px;
+            /* スマホ・タブレットでは縦可変、PC(md以上)では固定高さ。縦が低いPCへの考慮としてmin-height/max-heightをブレイク */
+            height: auto;
+            min-height: 580px;
             background-color: var(--bg-color);
             position: relative;
             overflow: hidden;
-            border-radius: 32px;
-            box-shadow: 0 30px 60px rgba(74, 62, 61, 0.12);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(74, 62, 61, 0.08);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 50px 70px;
-            border: 12px solid #FDF3E7;
+            padding: 24px 20px;
+            border: 6px solid #FDF3E7;
+        }
+
+        @media (min-width: 768px) {
+            .presentation-frame {
+                height: 675px;
+                border-radius: 32px;
+                box-shadow: 0 30px 60px rgba(74, 62, 61, 0.12);
+                padding: 45px 60px;
+                border: 12px solid #FDF3E7;
+            }
+        }
+        
+        /* 画面の高さが極端に低いPC環境での見切れ防止 */
+        @media (min-width: 768px) and (max-height: 720px) {
+            .presentation-frame {
+                height: auto;
+                min-height: 600px;
+            }
         }
 
         /* 優しい背景のグラデーション装飾 */
@@ -64,9 +83,9 @@
             position: absolute;
             top: -100px;
             right: -100px;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(242, 161, 168, 0.18) 0%, rgba(255, 253, 249, 0) 70%);
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(242, 161, 168, 0.15) 0%, rgba(255, 253, 249, 0) 70%);
             border-radius: 50%;
             z-index: 0;
         }
@@ -75,11 +94,16 @@
             position: absolute;
             bottom: -120px;
             left: -120px;
-            width: 450px;
-            height: 450px;
-            background: radial-gradient(circle, rgba(232, 130, 101, 0.15) 0%, rgba(255, 253, 249, 0) 70%);
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(232, 130, 101, 0.12) 0%, rgba(255, 253, 249, 0) 70%);
             border-radius: 50%;
             z-index: 0;
+        }
+
+        @media (min-width: 768px) {
+            .presentation-frame::before { width: 400px; height: 400px; }
+            .presentation-frame::after { width: 450px; height: 450px; }
         }
 
         .slide-content-area {
@@ -89,19 +113,29 @@
             flex-direction: column;
             justify-content: center;
             height: 100%;
+            overflow-y: auto; /* 万が一の中身溢れ時もスクロールを許可 */
         }
 
         .slide-title {
-            font-size: 34px;
+            font-size: 22px;
             font-weight: 900;
             color: var(--primary-color);
-            border-left: 10px solid var(--accent-color);
-            padding-left: 20px;
+            border-left: 6px solid var(--accent-color);
+            padding-left: 12px;
             line-height: 1.2;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
+        }
+
+        @media (min-width: 768px) {
+            .slide-title {
+                font-size: 34px;
+                border-left-width: 10px;
+                padding-left: 20px;
+                margin-bottom: 30px;
+            }
         }
 
         /* スライド表示・非表示 */
@@ -111,6 +145,7 @@
             justify-content: center;
             height: 100%;
             animation: slideIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            padding: 4px 0;
         }
 
         .slide.active {
@@ -126,33 +161,63 @@
         .chart-list {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
             width: 100%;
+        }
+
+        @media (min-width: 768px) {
+            .chart-list { gap: 15px; }
         }
 
         .chart-bar-item {
             display: flex;
-            align-items: center;
+            flex-direction: column;
+            align-items: flex-start;
             width: 100%;
+            gap: 4px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-bar-item {
+                flex-direction: row;
+                align-items: center;
+                gap: 0;
+            }
         }
 
         .chart-label {
-            flex: 0 0 340px;
-            text-align: right;
+            width: 100%;
+            text-align: left;
             font-weight: 700;
-            font-size: 16px;
-            padding-right: 22px;
+            font-size: 13px;
             color: var(--primary-color);
             line-height: 1.3;
         }
 
+        @media (min-width: 768px) {
+            .chart-label {
+                flex: 0 0 340px;
+                text-align: right;
+                font-size: 16px;
+                padding-right: 22px;
+            }
+        }
+
         .chart-track {
+            width: 100%;
             flex-grow: 1;
-            height: 32px;
+            height: 24px;
             background-color: #EFE6DD;
-            border-radius: 16px;
+            border-radius: 12px;
             overflow: hidden;
             position: relative;
+        }
+
+        @media (min-width: 768px) {
+            .chart-track {
+                height: 32px;
+                border-radius: 16px;
+            }
         }
 
         .chart-fill {
@@ -160,30 +225,50 @@
             display: flex;
             align-items: center;
             justify-content: flex-end;
-            padding-right: 15px;
+            padding-right: 12px;
             color: white;
             font-weight: 900;
-            font-size: 13px;
-            border-radius: 16px;
+            font-size: 11px;
+            border-radius: 12px;
             width: 0%;
             transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
+        @media (min-width: 768px) {
+            .chart-fill {
+                padding-right: 15px;
+                font-size: 13px;
+                border-radius: 16px;
+            }
+        }
+
         /* クロス集計テーブル */
+        .report-table-container {
+            width: 100%;
+            overflow-x: auto; /* スマホでの横はみ出しを防ぐスクロールコンテナ */
+            -webkit-overflow-scrolling: touch;
+            border-radius: 16px;
+            border: 2px solid #EFE6DD;
+        }
+
         .report-table {
             width: 100%;
+            min-width: 500px; /* テーブルが潰れすぎないように最低幅を確保 */
             border-collapse: separate;
             border-spacing: 0;
-            border-radius: 20px;
-            overflow: hidden;
-            border: 2px solid #EFE6DD;
-            box-shadow: 0 10px 25px rgba(74, 62, 61, 0.03);
         }
 
         .report-table th, .report-table td {
-            padding: 14px 18px;
+            padding: 10px 12px;
             text-align: center;
-            font-size: 15px;
+            font-size: 13px;
+        }
+
+        @media (min-width: 768px) {
+            .report-table th, .report-table td {
+                padding: 14px 18px;
+                font-size: 15px;
+            }
         }
 
         .report-table th {
@@ -209,12 +294,20 @@
         /* 浮遊ワードクラウド */
         .cloud-board {
             position: relative;
-            height: 380px;
+            height: 280px;
             width: 100%;
             background-color: #FFFBF5;
-            border-radius: 28px;
-            border: 3px dashed #F0E2D5;
+            border-radius: 20px;
+            border: 2px dashed #F0E2D5;
             overflow: hidden;
+        }
+
+        @media (min-width: 768px) {
+            .cloud-board {
+                height: 380px;
+                border-radius: 28px;
+                border-width: 3px;
+            }
         }
 
         .cloud-tag {
@@ -223,13 +316,20 @@
             white-space: nowrap;
             transition: all 0.4s ease;
             cursor: pointer;
-            padding: 8px 18px;
-            border-radius: 24px;
+            padding: 4px 10px;
+            border-radius: 16px;
             box-shadow: 0 4px 10px rgba(74, 62, 61, 0.04);
         }
 
+        @media (min-width: 768px) {
+            .cloud-tag {
+                padding: 8px 18px;
+                border-radius: 24px;
+            }
+        }
+
         .cloud-tag:hover {
-            transform: scale(1.18) !important;
+            transform: scale(1.1) !important;
             box-shadow: 0 12px 25px rgba(232, 130, 101, 0.18);
             background-color: #ffffff;
             z-index: 100 !important;
@@ -237,15 +337,30 @@
 
         @keyframes float-slow {
             0%, 100% { transform: translateY(0px) rotate(var(--rot)); }
-            50% { transform: translateY(-12px) rotate(calc(var(--rot) + 2deg)); }
+            50% { transform: translateY(-6px) rotate(calc(var(--rot) + 1.5deg)); }
         }
         @keyframes float-medium {
             0%, 100% { transform: translateY(0px) rotate(var(--rot)); }
-            50% { transform: translateY(-16px) rotate(calc(var(--rot) - 2deg)); }
+            50% { transform: translateY(-8px) rotate(calc(var(--rot) - 1.5deg)); }
         }
         @keyframes float-fast {
             0%, 100% { transform: translateY(0px) rotate(var(--rot)); }
-            50% { transform: translateY(-8px) rotate(calc(var(--rot) + 1.5deg)); }
+            50% { transform: translateY(-4px) rotate(calc(var(--rot) + 1deg)); }
+        }
+
+        @media (min-width: 768px) {
+            @keyframes float-slow {
+                0%, 100% { transform: translateY(0px) rotate(var(--rot)); }
+                50% { transform: translateY(-12px) rotate(calc(var(--rot) + 2deg)); }
+            }
+            @keyframes float-medium {
+                0%, 100% { transform: translateY(0px) rotate(var(--rot)); }
+                50% { transform: translateY(-16px) rotate(calc(var(--rot) - 2deg)); }
+            }
+            @keyframes float-fast {
+                0%, 100% { transform: translateY(0px) rotate(var(--rot)); }
+                50% { transform: translateY(-8px) rotate(calc(var(--rot) + 1.5deg)); }
+            }
         }
 
         .f-s { animation: float-slow 6s ease-in-out infinite; }
@@ -254,8 +369,8 @@
 
         /* スライドナビドット */
         .nav-dot {
-            width: 12px;
-            height: 12px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
             background-color: #E2D4CD;
             transition: all 0.3s ease;
@@ -264,18 +379,26 @@
 
         .nav-dot.active {
             background-color: var(--accent-color);
-            width: 32px;
-            border-radius: 6px;
+            width: 20px;
+            border-radius: 4px;
+        }
+
+        @media (min-width: 768px) {
+            .nav-dot { width: 12px; height: 12px; }
+            .nav-dot.active { width: 32px; border-radius: 6px; }
         }
 
         /* カードタイル */
         .action-card {
             background-color: #ffffff;
             border: 2px solid #F3ECE5;
-            border-radius: 24px;
-            padding: 28px;
+            border-radius: 20px;
+            padding: 20px;
             transition: all 0.3s ease;
             box-shadow: 0 8px 20px rgba(74, 62, 61, 0.02);
+        }
+        @media (min-width: 768px) {
+            .action-card { border-radius: 24px; padding: 28px; }
         }
         .action-card:hover {
             transform: translateY(-5px);
@@ -289,8 +412,8 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 130px;
-            height: 130px;
+            width: 90px;
+            height: 90px;
             background-color: var(--bg-color);
             border-radius: 50%;
             display: flex;
@@ -299,6 +422,10 @@
             align-items: center;
             text-align: center;
             box-shadow: inset 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        @media (min-width: 768px) {
+            .donut-hole { width: 130px; height: 130px; }
         }
 
         .donut-chart-svg {
@@ -310,114 +437,111 @@
 
     <div class="presentation-frame">
         
-        <!-- スライドメイン領域 -->
         <div class="slide-content-area">
             
-            <!-- スライド 0: 表紙 -->
             <div id="slide-0" class="slide active">
-                <div class="text-center flex flex-col justify-center items-center h-full">
-                    <div class="mb-5 inline-block px-5 py-2 bg-[#FFF2EE] rounded-full border border-[#FBEBE7]">
-                        <span class="text-sm font-extrabold text-[#E88265] tracking-widest uppercase">Hachioji Peace Fes</span>
+                <div class="text-center flex flex-col justify-center items-center h-full py-4">
+                    <div class="mb-4 inline-block px-4 py-1.5 bg-[#FFF2EE] rounded-full border border-[#FBEBE7]">
+                        <span class="text-xs md:text-sm font-extrabold text-[#E88265] tracking-widest uppercase">Hachioji Peace Fes</span>
                     </div>
-                    <h1 class="text-5xl lg:text-6xl font-black mb-4 leading-tight tracking-wider" style="color: var(--primary-color);">
+                    <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black mb-4 leading-tight tracking-wider" style="color: var(--primary-color);">
                         平和へのアンケート最終報告<br>
                         <span class="text-[#E88265] font-black">「みんなの幸せのカタチ」</span>
                     </h1>
-                    <div class="w-24 h-2 bg-[#E88265] rounded-full my-6"></div>
-                    <p class="text-2xl font-bold text-[#6D5D5B]">回答者 1,793名から集まった、温かい想いのすべて。</p>
-                    <p class="text-sm text-gray-400 mt-10"><i class="fa-solid fa-circle-info mr-1.5"></i>キーボードの矢印キー(←/→)や、下のドットでもページをめくれます</p>
+                    <div class="w-16 md:w-24 h-1.5 md:h-2 bg-[#E88265] rounded-full my-4 md:my-6"></div>
+                    <p class="text-lg sm:text-xl md:text-2xl font-bold text-[#6D5D5B]">回答者 1,793名から集まった、温かい想いのすべて。</p>
+                    <p class="text-xs text-gray-400 mt-6 md:mt-10 hidden sm:block"><i class="fa-solid fa-circle-info mr-1.5"></i>キーボードの矢印キー(←/→)や、下のドットでもページをめめます</p>
+                    <p class="text-xs text-gray-400 mt-6 sm:hidden"><i class="fa-solid fa-hand-pointer mr-1.5"></i>左右のスワイプや下のボタンでページをめくれます</p>
                 </div>
             </div>
 
-            <!-- スライド 1: アンケート概要（性別×年代クロス集計） -->
             <div id="slide-1" class="slide">
                 <h2 class="slide-title"><i class="fa-solid fa-users text-[#E88265]"></i> アンケート回答状況の概要</h2>
-                <div class="grid grid-cols-12 gap-8 items-center h-full">
-                    <!-- 左カラム: カード -->
-                    <div class="col-span-5 flex flex-col space-y-5">
-                        <div class="bg-white p-7 rounded-3xl border-2 border-[#EFE6DD] text-center shadow-md">
-                            <span class="text-sm font-black text-[#8C7C7B] tracking-widest uppercase">有効回答者数</span>
-                            <p class="text-8xl font-black text-[#E88265] my-1">1,793<span class="text-2xl font-bold text-gray-500 ml-1">名</span></p>
+                <div class="grid grid-cols-12 gap-4 md:gap-8 items-center h-full">
+                    <div class="col-span-12 md:col-span-5 flex flex-col space-y-3 md:space-y-5">
+                        <div class="bg-white p-4 md:p-7 rounded-2xl md:rounded-3xl border-2 border-[#EFE6DD] text-center shadow-md">
+                            <span class="text-xs md:text-sm font-black text-[#8C7C7B] tracking-widest uppercase">有効回答者数</span>
+                            <p class="text-5xl sm:text-6xl md:text-8xl font-black text-[#E88265] my-1">1,793<span class="text-xl md:text-2xl font-bold text-gray-500 ml-1">名</span></p>
                         </div>
-                        <div class="bg-white p-6 rounded-3xl border-2 border-[#EFE6DD] shadow-md">
-                            <div class="flex justify-between px-2 mb-2.5 font-black text-sm">
-                                <span class="text-[#E88265]"><i class="fa-solid fa-venus mr-1"></i>女性 61.9% (1,110名)</span>
-                                <span class="text-[#5B7C99]"><i class="fa-solid fa-mars mr-1"></i>男性 36.6% (657名)</span>
+                        <div class="bg-white p-4 md:p-6 rounded-2xl md:rounded-3xl border-2 border-[#EFE6DD] shadow-md">
+                            <div class="flex justify-between px-1 md:px-2 mb-2 font-black text-xs md:text-sm">
+                                <span class="text-[#E88265]"><i class="fa-solid fa-venus mr-1"></i>女性 61.9%</span>
+                                <span class="text-[#5B7C99]"><i class="fa-solid fa-mars mr-1"></i>男性 36.6%</span>
                             </div>
-                            <div class="w-full h-5 bg-gray-100 rounded-full flex overflow-hidden border border-white">
+                            <div class="w-full h-4 md:h-5 bg-gray-100 rounded-full flex overflow-hidden border border-white">
                                 <div class="h-full bg-[#F2A1A8]" style="width: 61.9%"></div>
                                 <div class="h-full bg-[#5B7C99]" style="width: 36.6%"></div>
-                                <div class="h-full bg-gray-300" style="width: 1.5%"></div> <!-- その他・未回答 -->
+                                <div class="h-full bg-gray-300" style="width: 1.5%"></div>
                             </div>
-                            <span class="text-[10px] text-gray-400 mt-2 block text-center">※その他・未回答：1.5% (26名)</span>
+                            <span class="text-[9px] md:text-[10px] text-gray-400 mt-1.5 block text-center">※女性:1,110名 / 男性:657名 / その他・未回答:26名(1.5%)</span>
                         </div>
                     </div>
-                    <!-- 右カラム: クロス集計テーブル -->
-                    <div class="col-span-7">
-                        <table class="report-table shadow-sm">
-                            <thead>
-                                <tr>
-                                    <th>年代</th>
-                                    <th>女性</th>
-                                    <th>男性</th>
-                                    <th>その他・未回答</th>
-                                    <th>世代別計</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>10代</td>
-                                    <td>152名</td>
-                                    <td>79名</td>
-                                    <td>2名</td>
-                                    <td>233名 (13.0%)</td>
-                                </tr>
-                                <tr>
-                                    <td>20代</td>
-                                    <td>260名</td>
-                                    <td>192名</td>
-                                    <td>7名</td>
-                                    <td>459名 (25.6%)</td>
-                                </tr>
-                                <tr>
-                                    <td>30代</td>
-                                    <td>154名</td>
-                                    <td>165名</td>
-                                    <td>5名</td>
-                                    <td>324名 (18.1%)</td>
-                                </tr>
-                                <tr>
-                                    <td>40代</td>
-                                    <td>269名</td>
-                                    <td>113名</td>
-                                    <td>4名</td>
-                                    <td>386名 (21.5%)</td>
-                                </tr>
-                                <tr>
-                                    <td>幅広い世代（シニア等）</td>
-                                    <td>275名</td>
-                                    <td>108名</td>
-                                    <td>8名</td>
-                                    <td>391名 (21.8%)</td>
-                                </tr>
-                                <tr>
-                                    <td>合計</td>
-                                    <td>1,110名</td>
-                                    <td>657名</td>
-                                    <td>26名</td>
-                                    <td>1,793名 (100.0%)</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="col-span-12 md:col-span-7">
+                        <div class="report-table-container">
+                            <table class="report-table shadow-sm">
+                                <thead>
+                                    <tr>
+                                        <th>年代</th>
+                                        <th>女性</th>
+                                        <th>男性</th>
+                                        <th>その他・未回答</th>
+                                        <th>世代別計</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>10代</td>
+                                        <td>152名</td>
+                                        <td>79名</td>
+                                        <td>2名</td>
+                                        <td>233名 (13.0%)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>20代</td>
+                                        <td>260名</td>
+                                        <td>192名</td>
+                                        <td>7名</td>
+                                        <td>459名 (25.6%)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>30代</td>
+                                        <td>154名</td>
+                                        <td>165名</td>
+                                        <td>5名</td>
+                                        <td>324名 (18.1%)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>40代</td>
+                                        <td>269名</td>
+                                        <td>113名</td>
+                                        <td>4名</td>
+                                        <td>386名 (21.5%)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>幅広い世代</td>
+                                        <td>275名</td>
+                                        <td>108名</td>
+                                        <td>8名</td>
+                                        <td>391名 (21.8%)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>合計</td>
+                                        <td>1,110名</td>
+                                        <td>657名</td>
+                                        <td>26名</td>
+                                        <td>1,793名 (100.0%)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- スライド 2: 日常の幸せ -->
             <div id="slide-2" class="slide">
                 <h2 class="slide-title"><i class="fa-solid fa-face-laugh-beam text-[#F9D066]"></i> 日常の中で「幸せだな〜」と感じる瞬間</h2>
-                <div class="grid grid-cols-12 gap-8 items-center">
-                    <div class="col-span-7">
+                <div class="grid grid-cols-12 gap-4 md:gap-8 items-center">
+                    <div class="col-span-12 md:col-span-7">
                         <div class="chart-list">
                             <div class="chart-bar-item">
                                 <div class="chart-label">美味しいご飯やスイーツを食べている時</div>
@@ -441,42 +565,40 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-span-5 bg-[#FAF6F0] p-6 rounded-3xl border border-[#EFE6DD] flex flex-col justify-center">
-                        <h3 class="text-xl font-bold mb-3"><i class="fa-solid fa-quote-left text-[#E88265] mr-2"></i>日常が、平和そのもの</h3>
-                        <p class="text-sm text-[#6D5D5B] leading-relaxed">
+                    <div class="col-span-12 md:col-span-5 bg-[#FAF6F0] p-4 md:p-6 rounded-2xl md:rounded-3xl border border-[#EFE6DD] flex flex-col justify-center">
+                        <h3 class="text-base md:text-xl font-bold mb-1.5 md:mb-3"><i class="fa-solid fa-quote-left text-[#E88265] mr-2"></i>日常が、平和そのもの</h3>
+                        <p class="text-xs md:text-sm text-[#6D5D5B] leading-relaxed">
                             アンケート結果から浮き彫りになったのは、人々が感じる最大の幸せは「大切な人との笑顔の時間」や「美味しいものを食べる時」という、当たり前で愛おしい日常でした。平和を守るとは、このかけがえのない瞬間をみんなで守り抜くことに他なりません。
                         </p>
                     </div>
                 </div>
             </div>
 
-            <!-- スライド 3: 平和から連想すること -->
             <div id="slide-3" class="slide">
                 <h2 class="slide-title"><i class="fa-solid fa-dove text-[#7EB395]"></i> 平和と聞いて思い浮かぶこと</h2>
-                <div class="grid grid-cols-3 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
                     <div class="action-card">
-                        <div class="text-[#E88265] text-4xl mb-4"><i class="fa-solid fa-peace"></i></div>
-                        <h3 class="text-lg font-bold mb-2">戦争・暴力がないこと</h3>
+                        <div class="text-[#E88265] text-3xl md:text-4xl mb-2 md:mb-4"><i class="fa-solid fa-peace"></i></div>
+                        <h3 class="text-base md:text-lg font-bold mb-1 md:mb-2">戦争・暴力がないこと</h3>
                         <p class="text-xs text-[#6D5D5B] leading-relaxed">紛争や差別のない、誰もが脅かされずに心から安心して暮らせる世界を望む声が最も多く集まりました。</p>
                     </div>
                     <div class="action-card">
-                        <div class="text-[#7EB395] text-4xl mb-4"><i class="fa-solid fa-child-reaching"></i></div>
-                        <h3 class="text-lg font-bold mb-2">子どもが笑っていること</h3>
+                        <div class="text-[#7EB395] text-3xl md:text-4xl mb-2 md:mb-4"><i class="fa-solid fa-child-reaching"></i></div>
+                        <h3 class="text-base md:text-lg font-bold mb-1 md:mb-2">子どもが笑っていること</h3>
                         <p class="text-xs text-[#6D5D5B] leading-relaxed">未来の主役である子どもたちが、いつも元気に笑っていられる社会こそが、本当の平和の証明であるという想いです。</p>
                     </div>
                     <div class="action-card">
-                        <div class="text-[#5B7C99] text-4xl mb-4"><i class="fa-solid fa-heart-pulse"></i></div>
-                        <h3 class="text-lg font-bold mb-2">穏やかな心と安心感</h3>
+                        <div class="text-[#5B7C99] text-3xl md:text-4xl mb-2 md:mb-4"><i class="fa-solid fa-heart-pulse"></i></div>
+                        <h3 class="text-base md:text-lg font-bold mb-1 md:mb-2">穏やかな心と安心感</h3>
                         <p class="text-xs text-[#6D5D5B] leading-relaxed">「心に余裕があること」「安心して眠れること」といった、一人ひとりの内面的な豊かさを求める声も目立ちました。</p>
                     </div>
                 </div>
             </div>
 
-            <!-- スライド 4: 平和を実現するために必要なこと -->
             <div id="slide-4" class="slide">
                 <h2 class="slide-title"><i class="fa-solid fa-handshake-angle text-[#5B7C99]"></i> 平和を実現するために必要だと思うこと</h2>
-                <div class="grid grid-cols-12 gap-8 items-center">
-                    <div class="col-span-7">
+                <div class="grid grid-cols-12 gap-4 md:gap-8 items-center">
+                    <div class="col-span-12 md:col-span-7">
                         <div class="chart-list">
                             <div class="chart-bar-item">
                                 <div class="chart-label">対話（意見が違っても話し合うこと）</div>
@@ -500,20 +622,19 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-span-5 bg-[#F5F8FF] p-6 rounded-3xl border border-[#DBEAFE] flex flex-col justify-center">
-                        <h3 class="text-xl font-bold mb-3 text-[#5B7C99]"><i class="fa-solid fa-comments mr-2"></i>「対話」がひらく未来</h3>
-                        <p class="text-sm text-[#6D5D5B] leading-relaxed">
+                    <div class="col-span-12 md:col-span-5 bg-[#F5F8FF] p-4 md:p-6 rounded-2xl md:rounded-3xl border border-[#DBEAFE] flex flex-col justify-center">
+                        <h3 class="text-base md:text-xl font-bold mb-1.5 md:mb-3 text-[#5B7C99]"><i class="fa-solid fa-comments mr-2"></i>「対話」がひらく未来</h3>
+                        <p class="text-xs md:text-sm text-[#6D5D5B] leading-relaxed">
                             平和に必要なことの第1位は「対話」。違いを否定せず、じっくりと語り合う心の姿勢こそ、誰もが安心できる「居場所」を地域の中に生み出し、未来を拓く最大の鍵となります。
                         </p>
                     </div>
                 </div>
             </div>
 
-            <!-- スライド 5: 社会の不安 -->
             <div id="slide-5" class="slide">
                 <h2 class="slide-title"><i class="fa-solid fa-triangle-exclamation text-[#E88265]"></i> 現代の生活で感じる不安や課題</h2>
-                <div class="grid grid-cols-12 gap-8 items-center">
-                    <div class="col-span-7">
+                <div class="grid grid-cols-12 gap-4 md:gap-8 items-center">
+                    <div class="col-span-12 md:col-span-7">
                         <div class="chart-list">
                             <div class="chart-bar-item">
                                 <div class="chart-label">世界で起きている戦争や紛争のニュース</div>
@@ -537,104 +658,97 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-span-5 bg-[#FFF2EE] p-6 rounded-3xl border border-[#FBEBE7] flex flex-col justify-center">
-                        <h3 class="text-xl font-bold mb-3 text-[#E88265]"><i class="fa-solid fa-circle-nodes mr-2"></i>ネット上の空気に変化を</h3>
-                        <p class="text-sm text-[#6D5D5B] leading-relaxed">
+                    <div class="col-span-12 md:col-span-5 bg-[#FFF2EE] p-4 md:p-6 rounded-2xl md:rounded-3xl border border-[#FBEBE7] flex flex-col justify-center">
+                        <h3 class="text-base md:text-xl font-bold mb-1.5 md:mb-3 text-[#E88265]"><i class="fa-solid fa-circle-nodes mr-2"></i>ネット上の空気に変化を</h3>
+                        <p class="text-xs md:text-sm text-[#6D5D5B] leading-relaxed">
                             世界の大きな争いと同じくらい、身近な「ネット上のトゲトゲ感や誹謗中傷」に心を傷めている人が多く存在します。これは、日々の私たちの言葉遣いや一瞬の優しさで、変えていくことができる領域です。
                         </p>
                     </div>
                 </div>
             </div>
 
-            <!-- スライド 6: 自分にできそうなアクション -->
             <div id="slide-6" class="slide">
-                <h2 class="slide-title"><i class="fa-solid fa-seedling text-[#green-accent]"></i> 平和のために「これならできそう」と思うこと</h2>
-                <div class="grid grid-cols-3 gap-6">
+                <h2 class="slide-title"><i class="fa-solid fa-seedling text-emerald-600"></i> 平和のために「これならできそう」と思うこと</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
                     <div class="action-card">
-                        <div class="text-[#E88265] text-4xl mb-4"><i class="fa-solid fa-comment-medical"></i></div>
-                        <h3 class="text-lg font-bold mb-2">ありがとうを言葉で伝える</h3>
+                        <div class="text-[#E88265] text-3xl md:text-4xl mb-2 md:mb-4"><i class="fa-solid fa-comment-medical"></i></div>
+                        <h3 class="text-base md:text-lg font-bold mb-1 md:mb-2">ありがとうを言葉で伝える</h3>
                         <p class="text-xs text-[#6D5D5B] leading-relaxed">身近な家族や友人、同僚に感謝を直接言葉にする（74.5% / 1,337名）。多くが選んだ、最も簡単で最も温かい平和活動です。</p>
                     </div>
                     <div class="action-card">
-                        <div class="text-[#F9D066] text-4xl mb-4"><i class="fa-solid fa-heart-pulse"></i></div>
-                        <h3 class="text-lg font-bold mb-2">自分の機嫌を自分で取る</h3>
+                        <div class="text-[#F9D066] text-3xl md:text-4xl mb-2 md:mb-4"><i class="fa-solid fa-heart-pulse"></i></div>
+                        <h3 class="text-base md:text-lg font-bold mb-1 md:mb-2">自分の機嫌を自分で取る</h3>
                         <p class="text-xs text-[#6D5D5B] leading-relaxed">イライラしそうな時、一度深く呼吸をしてリセットする（52.8% / 947名）。個人の心の安定が、周りへの優しさへと広がります。</p>
                     </div>
                     <div class="action-card">
-                        <div class="text-[#7EB395] text-4xl mb-4"><i class="fa-solid fa-arrows-to-eye"></i></div>
-                        <h3 class="text-lg font-bold mb-2">頭ごなしに否定しない</h3>
+                        <div class="text-[#7EB395] text-3xl md:text-4xl mb-2 md:mb-4"><i class="fa-solid fa-arrows-to-eye"></i></div>
+                        <h3 class="text-base md:text-lg font-bold mb-1 md:mb-2">頭ごなしに否定しない</h3>
                         <p class="text-xs text-[#6D5D5B] leading-relaxed">自分と違う価値観に出会っても、まず一度受け止めようと努力する（48.4% / 869名）。そこから温かい対話が始まります。</p>
                     </div>
                 </div>
             </div>
 
-            <!-- スライド 7: キャラクタータイプ -->
             <div id="slide-7" class="slide">
                 <h2 class="slide-title"><i class="fa-solid fa-masks-theater text-[#F2A1A8]"></i> 平和をつくるキャラクタータイプ</h2>
-                <div class="grid grid-cols-12 gap-8 items-center">
-                    <div class="col-span-6 flex justify-center">
-                        <div class="relative w-56 h-56 flex items-center justify-center">
+                <div class="grid grid-cols-12 gap-4 md:gap-8 items-center">
+                    <div class="col-span-12 md:col-span-6 flex justify-center">
+                        <div class="relative w-40 h-40 md:w-56 md:h-56 flex items-center justify-center">
                             <div class="w-full h-full rounded-full shadow-inner" style="background: conic-gradient(#E88265 0% 32%, #F9D066 32% 55%, #7EB395 55% 75%, #C084FC 75% 95%, #4A3E3D 95% 100%);"></div>
-                            <div class="donut-hole !w-36 !h-32"><span class="text-lg font-black text-[#E88265]">個性を<br>輝かせる</span></div>
+                            <div class="donut-hole !w-24 !h-24 md:!w-36 md:!h-32"><span class="text-xs md:text-lg font-black text-[#E88265]">個性を<br>輝かせる</span></div>
                         </div>
                     </div>
-                    <div class="col-span-6">
-                        <div class="flex flex-col space-y-3">
-                            <div class="flex items-center text-base font-bold"><div class="w-4 h-4 rounded-full mr-4" style="background-color: #E88265;"></div>🤝 ピースサポーター (32% / 574名)</div>
-                            <div class="flex items-center text-base font-bold"><div class="w-4 h-4 rounded-full mr-4" style="background-color: #F9D066;"></div>👂 ピースリスナー (23% / 413名)</div>
-                            <div class="flex items-center text-base font-bold"><div class="w-4 h-4 rounded-full mr-4" style="background-color: #7EB395;"></div>🕊️ ピースコネクター (20% / 359名)</div>
-                            <div class="flex items-center text-base font-bold"><div class="w-4 h-4 rounded-full mr-4" style="background-color: #C084FC;"></div>🎨 ピースクリエイター (20% / 359名)</div>
-                            <div class="flex items-center text-base font-bold"><div class="w-4 h-4 rounded-full mr-4" style="background-color: #4A3E3D;"></div>🏃 ピースアクター (5% / 89名)</div>
+                    <div class="col-span-12 md:col-span-6">
+                        <div class="flex flex-col space-y-2 md:space-y-3 max-w-sm mx-auto md:max-w-none">
+                            <div class="flex items-center text-xs md:text-base font-bold"><div class="w-3 h-3 md:w-4 md:h-4 rounded-full mr-3 md:mr-4 shrink-0" style="background-color: #E88265;"></div>🤝 ピースサポーター (32% / 574名)</div>
+                            <div class="flex items-center text-xs md:text-base font-bold"><div class="w-3 h-3 md:w-4 md:h-4 rounded-full mr-3 md:mr-4 shrink-0" style="background-color: #F9D066;"></div>👂 ピースリスナー (23% / 413名)</div>
+                            <div class="flex items-center text-xs md:text-base font-bold"><div class="w-3 h-3 md:w-4 md:h-4 rounded-full mr-3 md:mr-4 shrink-0" style="background-color: #7EB395;"></div>🕊️ ピースコネクター (20% / 359名)</div>
+                            <div class="flex items-center text-xs md:text-base font-bold"><div class="w-3 h-3 md:w-4 md:h-4 rounded-full mr-3 md:mr-4 shrink-0" style="background-color: #C084FC;"></div>🎨 ピースクリエイター (20% / 359名)</div>
+                            <div class="flex items-center text-xs md:text-base font-bold"><div class="w-3 h-3 md:w-4 md:h-4 rounded-full mr-3 md:mr-4 shrink-0" style="background-color: #4A3E3D;"></div>🏃 ピースアクター (5% / 89名)</div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- スライド 8: ワードクラウド -->
             <div id="slide-8" class="slide">
                 <h2 class="slide-title"><i class="fa-solid fa-cloud-sun-rainbow text-[#E88265]"></i> 未来へのアイデア：私たちの願いと言葉</h2>
-                <div class="content-area justify-start">
+                <div class="slide-content-area justify-start">
                     <div class="cloud-board shadow-inner">
-                        <!-- やさしく揺れる美しいキーワードクラウド -->
-                        <span class="cloud-tag f-s text-4xl text-[#E88265] bg-rose-50" style="top: 15%; left: 8%; --rot: -3deg;">#まず自分から一歩</span>
-                        <span class="cloud-tag f-m text-5xl text-[#4A3E3D] bg-orange-50" style="top: 38%; left: 10%; --rot: 2deg;">対話と共生</span>
-                        <span class="cloud-tag f-f text-3xl text-[#7EB395] bg-green-50" style="top: 65%; left: 5%; --rot: -4deg;">#ネットのトゲトゲをなくす</span>
+                        <span class="cloud-tag f-s text-xs sm:text-2xl md:text-4xl text-[#E88265] bg-rose-50" style="top: 15%; left: 4%; --rot: -3deg;">#まず自分から一歩</span>
+                        <span class="cloud-tag f-m text-sm sm:text-3xl md:text-5xl text-[#4A3E3D] bg-orange-50" style="top: 42%; left: 6%; --rot: 2deg;">対話と共生</span>
+                        <span class="cloud-tag f-f text-xs sm:text-xl md:text-3xl text-[#7EB395] bg-green-50" style="top: 72%; left: 3%; --rot: -4deg;">#ネットのトゲトゲをなくす</span>
                         
-                        <span class="cloud-tag f-m text-6xl text-[#E88265] bg-rose-100 font-black" style="top: 8%; left: 38%; --rot: 1deg;">目の前の人を大切に</span>
-                        <span class="cloud-tag f-s text-4.5xl text-[#5B7C99] bg-blue-50 font-bold" style="top: 48%; left: 35%; --rot: -2deg;">#安心して集える居場所</span>
-                        <span class="cloud-tag f-f text-5xl text-[#7EB395] bg-green-100 font-black" style="top: 72%; left: 32%; --rot: 3deg;">ありがとうを言葉にする</span>
+                        <span class="cloud-tag f-m text-base sm:text-4xl md:text-6xl text-[#E88265] bg-rose-100 font-black" style="top: 8%; left: 36%; --rot: 1deg;">目の前の人を大切に</span>
+                        <span class="cloud-tag f-s text-xs sm:text-2xl md:text-[40px] text-[#5B7C99] bg-blue-50 font-bold" style="top: 48%; left: 33%; --rot: -2deg;">#安心して集える居場所</span>
+                        <span class="cloud-tag f-f text-sm sm:text-3xl md:text-5xl text-[#7EB395] bg-green-100 font-black" style="top: 76%; left: 30%; --rot: 3deg;">ありがとうを言葉にする</span>
                         
-                        <span class="cloud-tag f-f text-3.5xl text-[#5B7C99] bg-blue-50 font-bold" style="top: 18%; left: 72%; --rot: -1deg;">未来の子どもたちのために</span>
-                        <span class="cloud-tag f-s text-4.5xl text-[#E88265] bg-rose-50 font-extrabold" style="top: 42%; left: 75%; --rot: 3deg;">感謝を伝える</span>
-                        <span class="cloud-tag f-m text-4xl text-[#4A3E3D] bg-orange-50 font-black" style="top: 68%; left: 73%; --rot: -2deg;">歌と音楽の力</span>
+                        <span class="cloud-tag f-f text-xs sm:text-xl md:text-3.5xl text-[#5B7C99] bg-blue-50 font-bold" style="top: 18%; left: 68%; --rot: -1deg;">未来の子どもたちのために</span>
+                        <span class="cloud-tag f-s text-xs sm:text-2xl md:text-4.5xl text-[#E88265] bg-rose-50 font-extrabold" style="top: 45%; left: 70%; --rot: 3deg;">感謝を伝える</span>
+                        <span class="cloud-tag f-m text-xs sm:text-2xl md:text-4xl text-[#4A3E3D] bg-orange-50 font-black" style="top: 70%; left: 68%; --rot: -2deg;">歌と音楽の力</span>
                     </div>
                 </div>
             </div>
 
-            <!-- スライド 9: 総括 -->
             <div id="slide-9" class="slide">
                 <h2 class="slide-title"><i class="fa-solid fa-heart text-[#E88265]"></i> 全体総括</h2>
-                <div class="content-area justify-center">
-                    <div class="bg-[#FFFDF4] p-8 rounded-3xl border-2 border-[#F3D99F] max-w-4xl mx-auto shadow-sm">
-                        <h3 class="text-2xl font-black text-[#1e3a5f] mb-4 text-center">🕊️ 平和は「半径3メートル」の優しさから始まる</h3>
-                        <p class="text-base text-gray-700 leading-relaxed mb-4">
+                <div class="slide-content-area justify-center">
+                    <div class="bg-[#FFFDF4] p-4 md:p-8 rounded-2xl md:rounded-3xl border-2 border-[#F3D99F] max-w-4xl mx-auto shadow-sm">
+                        <h3 class="text-base sm:text-lg md:text-2xl font-black text-[#1e3a5f] mb-2 md:mb-4 text-center">🕊️ 平和は「半径3メートル」の優しさから始まる</h3>
+                        <p class="text-xs md:text-base text-gray-700 leading-relaxed mb-2 md:mb-4">
                             1,793名の温かい回答を通じて、私たちが本当に望む平和の姿が鮮やかに描かれました。それは、世界の悲惨なニュースを胸に止めつつも、<b>「身近な人にありがとうと伝える」「イライラした時に深呼吸をする」</b>といった、自分自身の小さな一歩を大切にすることです。
                         </p>
-                        <p class="text-base text-gray-700 leading-relaxed">
+                        <p class="text-xs md:text-base text-gray-700 leading-relaxed">
                             誰もが異なる素晴らしい「キャラクター」を持ち、それぞれの場所で平和を紡いでいます。今日このフェスで交わした笑顔や、響かせた歌声を日々の日常に灯し続け、お互いを優しく包み込む「ハピネスの連帯」を八王子の地から力強く広げてまいりましょう！
                         </p>
                     </div>
                 </div>
             </div>
 
-            <!-- コントロールバー＆ドット -->
-            <div class="flex justify-between items-center mt-6 shrink-0">
-                <div class="flex space-x-2.5" id="nav-dots">
-                    <!-- JSでドットが作成されます -->
-                </div>
-                <div class="flex space-x-4">
-                    <button onclick="prevSlide()" class="px-5 py-2.5 rounded-full border-2 border-[#D9C3BC] hover:bg-[#F5EFEB] font-black text-sm transition-all duration-300">◀ 前へ</button>
-                    <button onclick="nextSlide()" class="px-6 py-2.5 rounded-full bg-[#E88265] text-white hover:bg-[#df6a4d] font-black text-sm shadow-md transition-all duration-300">次へ ▶</button>
+            <div class="flex justify-between items-center mt-4 md:mt-6 shrink-0 pt-2 border-t border-dashed border-[#E2D4CD] md:border-t-0">
+                <div class="flex space-x-1.5 md:space-x-2.5" id="nav-dots">
+                    </div>
+                <div class="flex space-x-2 md:space-x-4">
+                    <button onclick="prevSlide()" class="px-3 md:px-5 py-2 md:py-2.5 rounded-full border-2 border-[#D9C3BC] hover:bg-[#F5EFEB] font-black text-xs md:text-sm transition-all duration-300">◀ 前へ</button>
+                    <button onclick="nextSlide()" class="px-4 md:px-6 py-2 md:py-2.5 rounded-full bg-[#E88265] text-white hover:bg-[#df6a4d] font-black text-xs md:text-sm shadow-md transition-all duration-300">次へ ▶</button>
                 </div>
             </div>
 
@@ -665,13 +779,22 @@
             dots[targetIdx].classList.add('active');
 
             // グラフスライド時のアニメーション発火
-            if (targetIdx === 2 || targetIdx === 4 || targetIdx === 5) {
+            if (targetIdx === 2 || targetIdx === 4 || targetIdx === 5) 
+            {
+            // 1. まず一瞬で幅を0%にリセット（2回目以降に開いた時もアニメーションさせるため）
+                const fills = document.querySelectorAll(`#slide-${targetIdx} .chart-fill`);
+                fills.forEach(fill => {
+                    fill.style.transition = 'none'; // アニメーションを一時オフ
+                    fill.style.width = '0%';
+                });
+
+            // 2. ほんの一瞬（20ミリ秒）待ってからアニメーションを適用して伸ばす
                 setTimeout(() => {
-                    const fills = document.querySelectorAll(`#slide-${targetIdx} .chart-fill`);
-                    fills.forEach(fill => {
-                        fill.style.width = fill.getAttribute('data-width');
-                    });
-                }, 100);
+                fills.forEach(fill => {
+                    fill.style.transition = 'width 1.2s cubic-bezier(0.16, 1, 0.3, 1)'; // アニメーションを再開
+                    fill.style.width = fill.getAttribute('data-width'); // 本来の幅へ伸ばす
+                });
+                }, 20); 
             }
 
             currentIdx = targetIdx;
@@ -692,9 +815,31 @@
                 nextSlide();
             } else if (e.key === 'ArrowLeft') {
                 e.preventDefault();
-                prevSlide();
             }
         });
+
+        // 📱 スマホ用スワイプジェスチャーの追加
+        let touchStartX = 0;
+        let touchEndX = 0;
+        const frame = document.querySelector('.presentation-frame');
+
+        frame.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        frame.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, { passive: true });
+
+        function handleSwipe() {
+            const swipeThreshold = 50; // スワイプを認識する最小ピクセル数
+            if (touchStartX - touchEndX > swipeThreshold) {
+                nextSlide(); // 左スワイプで次へ
+            } else if (touchEndX - touchStartX > swipeThreshold) {
+                prevSlide(); // 右スワイプで前へ
+            }
+        }
 
         // 起動時初期アニメーション
         window.onload = function() {
