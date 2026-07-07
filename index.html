@@ -291,49 +291,33 @@
             color: var(--accent-color);
         }
 
-        /* 浮遊ワードクラウド */
-        .cloud-board {
-            position: relative;
-            height: 280px;
-            width: 100%;
-            background-color: #FFFBF5;
-            border-radius: 20px;
-            border: 2px dashed #F0E2D5;
-            overflow: hidden;
-        }
-
-        @media (min-width: 1024px) {
+       /* 浮遊ワードクラウド */
+        /* ===== 密集型ワードクラウド用 CSS（既存の .cloud-tag 系は使わず、こちらを新規追加） ===== */
             .cloud-board {
-                height: 380px;
-                border-radius: 28px;
-                border-width: 3px;
-            }
-        }
-
-        .cloud-tag {
-            position: absolute;
-            font-weight: 900;
-            white-space: nowrap;
-            transition: all 0.4s ease;
-            cursor: pointer;
-            padding: 4px 10px;
-            border-radius: 16px;
-            box-shadow: 0 4px 10px rgba(74, 62, 61, 0.04);
-        }
-
-        @media (min-width: 1024px) {
-            .cloud-tag {
-                padding: 8px 18px;
+                position: relative;
+                width: 100%;
+                height: 340px;
                 border-radius: 24px;
+                background: linear-gradient(180deg, #FFFEFC 0%, #FFF9F1 100%);
+                box-shadow: inset 0 0 0 1px rgba(232, 130, 101, 0.07);
+                overflow: hidden;
             }
-        }
+            @media (min-width: 640px) { .cloud-board { height: 420px; } }
+            @media (min-width: 1024px) { .cloud-board { height: 520px; border-radius: 30px; } }
 
-        .cloud-tag:hover {
-            transform: scale(1.1) !important;
-            box-shadow: 0 12px 25px rgba(232, 130, 101, 0.18);
-            background-color: #ffffff;
-            z-index: 100 !important;
-        }
+            .cloud-word {
+                position: absolute;
+                white-space: nowrap;
+                line-height: 1;
+                transform: translate(-50%, -50%);
+                transition: transform 0.25s ease, opacity 0.25s ease;
+                font-family: "Noto Sans JP", sans-serif;
+            }
+            .cloud-word:hover {
+                transform: translate(-50%, -50%) scale(1.08);
+                opacity: 0.85;
+                z-index: 20;
+            }
 
         @keyframes float-slow {
             0%, 100% { transform: translateY(0px) rotate(var(--rot)); }
@@ -709,22 +693,11 @@
                 </div>
             </div>
 
-            <div id="slide-8" class="slide">
-                <h2 class="slide-title"><i class="fa-solid fa-cloud-sun-rainbow text-[#E88265]"></i> 未来へのアイデア：私たちの願いと言葉</h2>
+             <div id="slide-8" class="slide">
+                <h2 class="slide-title"><i class="fa-solid fa-cloud-sun-rainbow text-[#E88265]"></i> 未来へのアイデア：みんなの願い（全体版）</h2>
                 <div class="slide-content-area justify-start">
-                    <div class="cloud-board shadow-inner">
-                        <span class="cloud-tag f-s text-xs sm:text-2xl lg:text-4xl text-[#E88265] bg-rose-50" style="top: 15%; left: 4%; --rot: -3deg;">#まず自分から一歩</span>
-                        <span class="cloud-tag f-m text-sm sm:text-3xl lg:text-5xl text-[#4A3E3D] bg-orange-50" style="top: 42%; left: 6%; --rot: 2deg;">対話と共生</span>
-                        <span class="cloud-tag f-f text-xs sm:text-xl lg:text-3xl text-[#7EB395] bg-green-50" style="top: 72%; left: 3%; --rot: -4deg;">#ネットのトゲトゲをなくす</span>
-                        
-                        <span class="cloud-tag f-m text-base sm:text-4xl lg:text-6xl text-[#E88265] bg-rose-100 font-black" style="top: 8%; left: 36%; --rot: 1deg;">目の前の人を大切に</span>
-                        <span class="cloud-tag f-s text-xs sm:text-2xl lg:text-[40px] text-[#5B7C99] bg-blue-50 font-bold" style="top: 48%; left: 33%; --rot: -2deg;">#安心して集える居場所</span>
-                        <span class="cloud-tag f-f text-sm sm:text-3xl lg:text-5xl text-[#7EB395] bg-green-100 font-black" style="top: 76%; left: 30%; --rot: 3deg;">ありがとうを言葉にする</span>
-                        
-                        <span class="cloud-tag f-f text-xs sm:text-xl lg:text-3.5xl text-[#5B7C99] bg-blue-50 font-bold" style="top: 18%; left: 68%; --rot: -1deg;">未来の子どもたちのために</span>
-                        <span class="cloud-tag f-s text-xs sm:text-2xl lg:text-4.5xl text-[#E88265] bg-rose-50 font-extrabold" style="top: 45%; left: 70%; --rot: 3deg;">感謝を伝える</span>
-                        <span class="cloud-tag f-m text-xs sm:text-2xl lg:text-4xl text-[#4A3E3D] bg-orange-50 font-black" style="top: 70%; left: 68%; --rot: -2deg;">歌と音楽の力</span>
-                    </div>
+                    <div class="cloud-board" id="peace-cloud"></div>
+                    <p class="text-center text-xs text-[#9C8A82] mt-2 lg:mt-4">自由記述から抽出した頻出語（文字の大きさ＝出現回数）</p>
                 </div>
             </div>
 
@@ -797,6 +770,14 @@
                 }, 20); 
             }
 
+            // 【修正部分】スライド8（ワードクラウド）に切り替わった時に再描画する
+            if (targetIdx === 8) {
+                // DOMの描画とクラス切り替え（display: flex）が反映されてコンテナサイズが確定するのをわずかに待つ
+                setTimeout(buildPeaceCloud, 60);
+            }
+
+
+
             currentIdx = targetIdx;
         }
 
@@ -850,6 +831,107 @@
                 });
             }, 300);
         };
+        // ===== 密集型ワードクラウド 描画スクリプト =====
+        const PEACE_WORD_DATA = [{"text": "平和", "freq": 82}, {"text": "考える", "freq": 27}, {"text": "対話", "freq": 26}, {"text": "教育", "freq": 25}, {"text": "持つ", "freq": 24}, {"text": "世界", "freq": 24}, {"text": "イベント", "freq": 23}, {"text": "社会", "freq": 22}, {"text": "未来", "freq": 22}, {"text": "感じる", "freq": 20}, {"text": "地域", "freq": 19}, {"text": "子供", "freq": 19}, {"text": "機会", "freq": 19}, {"text": "環境", "freq": 17}, {"text": "活動", "freq": 17}, {"text": "場所", "freq": 17}, {"text": "大切", "freq": 16}, {"text": "みんな", "freq": 16}, {"text": "作る", "freq": 15}, {"text": "交流", "freq": 15}, {"text": "世代", "freq": 14}, {"text": "子ども", "freq": 14}, {"text": "発信", "freq": 13}, {"text": "価値", "freq": 13}, {"text": "アクション", "freq": 12}, {"text": "生活", "freq": 12}, {"text": "戦争", "freq": 12}, {"text": "意見", "freq": 12}, {"text": "SNS", "freq": 12}, {"text": "繋がり", "freq": 11}, {"text": "気持ち", "freq": 11}, {"text": "学校", "freq": 11}, {"text": "参加", "freq": 10}, {"text": "身近", "freq": 10}, {"text": "必要", "freq": 10}, {"text": "知る", "freq": 10}, {"text": "相手", "freq": 10}, {"text": "情報", "freq": 10}, {"text": "作り", "freq": 9}, {"text": "文化", "freq": 9}, {"text": "学ぶ", "freq": 9}, {"text": "居場所", "freq": 8}, {"text": "つながる", "freq": 8}, {"text": "開催", "freq": 8}, {"text": "取り組み", "freq": 8}, {"text": "お互い", "freq": 8}, {"text": "気軽", "freq": 8}, {"text": "増える", "freq": 8}, {"text": "生きる", "freq": 8}, {"text": "安心", "freq": 8}, {"text": "多様", "freq": 8}, {"text": "関係", "freq": 8}, {"text": "展示", "freq": 7}, {"text": "続ける", "freq": 7}, {"text": "自由", "freq": 7}, {"text": "行う", "freq": 7}, {"text": "向ける", "freq": 7}, {"text": "周り", "freq": 7}, {"text": "見る", "freq": 7}, {"text": "持てる", "freq": 7}, {"text": "大事", "freq": 7}, {"text": "音楽", "freq": 7}, {"text": "意識", "freq": 7}, {"text": "繋がる", "freq": 7}, {"text": "わかる", "freq": 7}, {"text": "人間", "freq": 7}, {"text": "合える", "freq": 7}, {"text": "若い", "freq": 7}, {"text": "問題", "freq": 6}, {"text": "先生", "freq": 6}, {"text": "若者", "freq": 6}, {"text": "高齢", "freq": 6}, {"text": "青年", "freq": 6}, {"text": "組織", "freq": 6}, {"text": "企画", "freq": 6}, {"text": "きっかけ", "freq": 6}, {"text": "言う", "freq": 6}, {"text": "今回", "freq": 6}, {"text": "自身", "freq": 6}, {"text": "世界中", "freq": 6}, {"text": "合う", "freq": 6}, {"text": "世の中", "freq": 6}, {"text": "地球", "freq": 6}, {"text": "つながり", "freq": 6}, {"text": "もらえる", "freq": 6}];
+
+        const PEACE_PALETTE = {
+            hero:   '#E88265',
+            dark:   '#4A3E3D',
+            blue:   '#5B7C99',
+            green:  '#7EB395',
+            pink:   '#F2A1A8',
+            muted:  '#B9A99C'
+        };
+
+        function buildPeaceCloud() {
+            const container = document.getElementById('peace-cloud');
+            if (!container) return;
+            container.innerHTML = '';
+            const W = container.clientWidth;
+            const H = container.clientHeight;
+            if (W === 0 || H === 0) return;
+
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            const sorted = PEACE_WORD_DATA.slice().sort((a, b) => b.freq - a.freq);
+            const maxF = sorted[0].freq;
+            const minF = sorted[sorted.length - 1].freq;
+
+            const maxSize = Math.min(W, H) * 0.24;
+            const minSize = Math.max(11, Math.min(W, H) * 0.022);
+
+            function styleFor(rank, total) {
+                const t = rank / total;
+                if (rank === 0) return { weight: 900, color: PEACE_PALETTE.hero };
+                if (t < 0.10) return { weight: 900, color: rank % 2 === 0 ? PEACE_PALETTE.dark : PEACE_PALETTE.blue };
+                if (t < 0.28) return { weight: 700, color: [PEACE_PALETTE.dark, PEACE_PALETTE.blue, PEACE_PALETTE.green, PEACE_PALETTE.hero][rank % 4] };
+                if (t < 0.55) return { weight: 500, color: [PEACE_PALETTE.blue, PEACE_PALETTE.green, PEACE_PALETTE.pink, PEACE_PALETTE.dark][rank % 4] };
+                return { weight: 400, color: PEACE_PALETTE.muted };
+            }
+
+            const placed = [];
+            const cx = W / 2, cy = H * 0.5;
+            const els = [];
+
+            sorted.forEach((wordObj, rank) => {
+                const t = Math.pow((wordObj.freq - minF) / Math.max(1, (maxF - minF)), 0.55);
+                const fontSize = minSize + t * (maxSize - minSize);
+                const style = styleFor(rank, sorted.length);
+
+                ctx.font = style.weight + " " + fontSize + "px 'Noto Sans JP', sans-serif";
+                const metrics = ctx.measureText(wordObj.text);
+                const w = metrics.width;
+                const h = fontSize * 0.98;
+                const halfW = w / 2 + 2, halfH = h / 2 + 1.5;
+
+                let x = cx, y = cy, placedOk = false;
+                const angleStep = 0.20;
+                const radiusStep = Math.max(0.55, Math.min(W, H) * 0.0016);
+                const maxRadius = Math.max(W, H) * 0.75;
+
+                for (let step = 0; step < 3000; step++) {
+                    const angle = step * angleStep;
+                    const radius = radiusStep * angle;
+                    if (radius > maxRadius) break;
+                    const tx = cx + radius * Math.cos(angle) * (W >= H ? 1 : 0.82);
+                    const ty = cy + radius * Math.sin(angle) * (W >= H ? 0.72 : 1);
+
+                    const rect = { x1: tx - halfW, x2: tx + halfW, y1: ty - halfH, y2: ty + halfH };
+                    if (rect.x1 < 2 || rect.x2 > W - 2 || rect.y1 < 2 || rect.y2 > H - 2) continue;
+
+                    let collide = false;
+                    for (const p of placed) {
+                        if (!(rect.x2 < p.x1 || rect.x1 > p.x2 || rect.y2 < p.y1 || rect.y1 > p.y2)) { collide = true; break; }
+                    }
+                    if (!collide) { x = tx; y = ty; placedOk = true; placed.push(rect); break; }
+                }
+                if (!placedOk) return;
+
+                const span = document.createElement('span');
+                span.className = 'cloud-word';
+                span.textContent = wordObj.text;
+                span.style.left = x + 'px';
+                span.style.top = y + 'px';
+                span.style.fontSize = fontSize + 'px';
+                span.style.fontWeight = style.weight;
+                span.style.color = style.color;
+                els.push(span);
+            });
+
+            els.forEach(el => container.appendChild(el));
+        }
+
+        // リサイズ時の安全な再計算
+        let peaceCloudResizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(peaceCloudResizeTimer);
+            // 現在アクティブなスライドが8(ワードクラウド)の場合のみリサイズ処理を走らせる
+            if (currentIdx === 8) {
+                peaceCloudResizeTimer = setTimeout(buildPeaceCloud, 180);
+            }
+        });
+
     </script>
 </body>
 </html>
